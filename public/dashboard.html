@@ -952,40 +952,39 @@
 
             // Check localStorage session
             var session = null;
-            try { session = JSON.parse(localStorage.getItem('pentexa_session')); }
-            catch (e) { session = null; }
+            try {
+                var raw = localStorage.getItem('pentexa_session');
+                // Could be doubly stringified or strangely formatted
+                session = typeof raw === 'string' ? JSON.parse(raw) : raw;
+                if (typeof session === 'string') session = JSON.parse(session);
+            } catch (e) { session = null; }
+
+            // Extract user securely
+            var userObj = null;
+            if (session && session.user) userObj = session.user;
+            else if (session && session.id) userObj = session; // Direct object
 
             // Fallback: check URL parameter (for file:// protocol)
-            if (!session || !session.user || !session.user.id) {
+            if (!userObj || !userObj.id) {
                 try {
                     var params = new URLSearchParams(window.location.search);
                     var uid = params.get('uid');
                     if (uid) {
-                        session = { user: { id: uid, email: 'user@pentexa.local', full_name: 'Local User' } };
-                        // Save to localStorage for future use
-                        localStorage.setItem('pentexa_session', JSON.stringify(session));
+                        userObj = { id: uid, email: 'user@pentexa.local', full_name: 'Local User' };
+                        localStorage.setItem('pentexa_session', JSON.stringify({ user: userObj }));
+                        session = { user: userObj };
                     }
                 } catch (e) { /* URLSearchParams not supported */ }
             }
 
             // No session at all → show debug instead of redirect
-            if (!session || !session.user || !session.user.id) {
-                document.body.innerHTML = '<div style="color:white; padding: 40px;"><h1>Auth Error: No Session</h1><p>Session read as: ' + JSON.stringify(session) + '</p><a href="auth.html">Go Back to Login</a></div>';
-                return;
-            }
-
-            // Find user from session directly (since backend sets it)
-            var found = session ? session.user : null;
-
-            if (!found) {
-                localStorage.removeItem('pentexa_session');
-                localStorage.removeItem('pentexa_token');
-                document.body.innerHTML = '<div style="color:white; padding: 40px;"><h1>Auth Error: User Not Found</h1><p>Session missing.</p><a href="auth.html">Go Back to Login</a></div>';
+            if (!userObj || !userObj.id) {
+                document.body.innerHTML = '<div style="color:white; padding: 40px; font-family: sans-serif;"><h1>Auth Error: Invalid Session Format</h1><p>We received the following raw data from your browser storage:</p><pre style="background:#111; padding:15px; border-radius:8px; overflow-x:auto;">' + JSON.stringify(session, null, 2) + '</pre><a href="auth.html" style="color:#00ffc8;">Go Back to Login</a></div>';
                 return;
             }
 
             // Auth passed!
-            window._dashUser = found;
+            window._dashUser = userObj;
         })();
 
         // If auth failed, stop everything

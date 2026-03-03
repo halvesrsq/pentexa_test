@@ -92,7 +92,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const params = new URLSearchParams(location.search);
             if (params.get('uid')) {
-                localStorage.setItem('pentexa_session', JSON.stringify({ userId: params.get('uid') }));
+                localStorage.setItem('pentexa_session', JSON.stringify({ user: { id: params.get('uid') } }));
             }
             const user = await requireAdmin();
             if (!user) return;

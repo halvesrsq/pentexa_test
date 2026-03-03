@@ -201,7 +201,7 @@ async function checkAuthStatus() {
   if (!token) return null;
   try {
     const user = await apiRequest('/auth/me');
-    localStorage.setItem('pentexa_session', JSON.stringify({ user }));
+    localStorage.setItem('pentexa_session', JSON.stringify({ user: user }));
     return user;
   } catch (e) {
     localStorage.removeItem('pentexa_token');
