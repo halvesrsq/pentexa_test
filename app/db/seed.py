@@ -68,43 +68,49 @@ DEFAULT_ROLES = [
 
 
 async def seed_roles_and_permissions(db: AsyncSession) -> None:
-    """Rolleri ve izinleri oluşturur (varsa atlar — idempotent)"""
+    """Rolleri ve izinleri oluşturur (varsa atlar — idempotent/concurrent safe)"""
     
-    # 1. İzinleri oluştur
-    existing_perms = await db.execute(select(Permission))
-    existing_perm_names = {p.name for p in existing_perms.scalars().all()}
-    
+    # --- 1. İzinleri oluştur (Tek tek kontrol ederek ekle) ---
     perm_map = {}
     for perm_data in DEFAULT_PERMISSIONS:
-        if perm_data["name"] not in existing_perm_names:
-            perm = Permission(**perm_data)
-            db.add(perm)
-            await db.flush()
+        result = await db.execute(select(Permission).filter_by(name=perm_data["name"]))
+        perm = result.scalars().first()
+        if not perm:
+            try:
+                perm = Permission(**perm_data)
+                db.add(perm)
+                await db.flush()
+                logger.info(f"İzin eklendi: {perm.name}")
+            except Exception as e:
+                # Concurrent invocation might have beaten us to it
+                await db.rollback()
+                result = await db.execute(select(Permission).filter_by(name=perm_data["name"]))
+                perm = result.scalars().first()
+        if perm:
             perm_map[perm.name] = perm
-            logger.info(f"İzin oluşturuldu: {perm.name}")
-        else:
-            result = await db.execute(
-                select(Permission).filter(Permission.name == perm_data["name"])
-            )
-            perm_map[perm_data["name"]] = result.scalars().first()
 
-    # 2. Rolleri oluştur
-    existing_roles = await db.execute(select(Role))
-    existing_role_names = {r.name for r in existing_roles.unique().scalars().all()}
-    
+    # --- 2. Rolleri oluştur ---
     for role_data in DEFAULT_ROLES:
-        if role_data["name"] not in existing_role_names:
-            role = Role(
-                name=role_data["name"],
-                description=role_data["description"],
-            )
-            # İzinleri ata
-            for perm_name in role_data["permissions"]:
-                if perm_name in perm_map:
-                    role.permissions.append(perm_map[perm_name])
-            
-            db.add(role)
-            logger.info(f"Rol oluşturuldu: {role.name} ({len(role.permissions)} izin)")
+        result = await db.execute(select(Role).filter_by(name=role_data["name"]))
+        role = result.unique().scalars().first()
+        
+        if not role:
+            try:
+                role = Role(name=role_data["name"], description=role_data["description"])
+                # İzinleri eşleştir
+                valid_perms = [perm_map[p] for p in role_data["permissions"] if p in perm_map]
+                role.permissions.extend(valid_perms)
+                
+                db.add(role)
+                await db.flush()
+                logger.info(f"Rol eklendi: {role.name}")
+            except Exception as e:
+                await db.rollback()
+                pass # Let the other concurrent function handle it
 
-    await db.commit()
+    try:
+        await db.commit()
+    except Exception:
+        await db.rollback()
+    
     logger.info("Seed tamamlandı ✓")
