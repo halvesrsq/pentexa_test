@@ -11,6 +11,7 @@ import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import RedirectResponse
 from fastapi.exceptions import RequestValidationError
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -106,13 +107,7 @@ def create_app() -> FastAPI:
 
     @app.get("/")
     def root():
-        return {
-            "project": settings.PROJECT_NAME,
-            "status": "running",
-            "version": "1.0",
-            "docs": "/docs",
-            "environment": "vercel" if os.environ.get("VERCEL") else "local",
-        }
+        return RedirectResponse(url="/docs")
 
     return app
 
