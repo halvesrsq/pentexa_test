@@ -1,0 +1,51 @@
+# ── Python ──
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── Virtual Environments ──
+venv/
+.venv/
+env/
+
+# ── Environment / Secrets ──
+.env
+.env.local
+.env.production
+
+# ── Databases ──
+*.db
+*.sqlite3
+
+# ── IDE ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Docker (not needed on Vercel) ──
+Dockerfile
+docker-compose.yml
+docker-compose.*.yml
+
+# ── Logs ──
+*.log
+
+# ── Pytest ──
+.pytest_cache/
+htmlcov/
+.coverage
+
+# ── Vercel ──
+.vercel/

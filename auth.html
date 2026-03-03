@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login or register for Pentexa — access security tools, dashboards, and more.">
+    <title>Login / Register — Pentexa</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <meta property="og:title" content="Pentexa">
+    <meta property="og:description" content="Pentexa — Cybersecurity and penetration testing platform.">
+    <meta property="og:type" content="website">
+</head>
+
+<body>
+    <div class="page-header">
+        <h1 data-i18n="authPage.title" data-i18n-html>Welcome <span class="gradient-text">Back</span></h1>
+        <p data-i18n="authPage.desc">Sign in to access your security dashboard and tools.</p>
+    </div>
+
+    <section class="section" style="padding-top: 20px;" aria-label="Authentication">
+        <div class="container">
+            <div style="max-width: 440px; margin: 0 auto;">
+                <div class="card" style="padding: 36px;">
+                    <!-- Tabs -->
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" id="loginTab" type="button"
+                            data-i18n="auth.loginTab">Login</button>
+                        <button class="auth-tab" id="registerTab" type="button"
+                            data-i18n="auth.registerTab">Register</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="loginForm" class="auth-form active" novalidate>
+                        <div class="form-group">
+                            <label for="loginEmail" data-i18n="auth.email">Email</label>
+                            <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com"
+                                autocomplete="email" required aria-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword" data-i18n="auth.password">Password</label>
+                            <input type="password" id="loginPassword" class="form-input" autocomplete="current-password"
+                                placeholder="Enter your password" required aria-required="true">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%; margin-top: 8px;"
+                            data-i18n="auth.signIn">Sign In</button>
+
+                        <p
+                            style="text-align: center; margin-top: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+                            <span data-i18n="auth.noAccount">Don't have an account?</span>
+                            <a href="#" id="switchToRegister" style="color: var(--cyan); font-weight: 600;"
+                                data-i18n="auth.registerTab">Register</a>
+                        </p>
+
+                        <div style="text-align: center; margin-top: 16px;">
+                            <button type="button" onclick="showForgotPassword()"
+                                style="background: transparent; border: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; cursor: pointer; text-decoration: underline; transition: color 0.2s;"
+                                onmouseover="this.style.color='var(--cyan)'"
+                                onmouseout="this.style.color='var(--text-muted)'" data-i18n="auth.forgotPw">Forgot
+                                Password?</button>
+                        </div>
+                    </form>
+
+                    <!-- Register Form -->
+                    <form id="registerForm" class="auth-form" novalidate>
+                        <div class="form-group">
+                            <label for="regName" data-i18n="auth.fullName">Full Name</label>
+                            <input type="text" id="regName" class="form-input" placeholder="John Doe" required
+                                autocomplete="name" aria-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail" data-i18n="auth.email">Email</label>
+                            <input type="email" id="regEmail" class="form-input" placeholder="you@example.com" required
+                                autocomplete="email" aria-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword" data-i18n="auth.password">Password</label>
+                            <input type="password" id="regPassword" class="form-input" autocomplete="new-password"
+                                data-i18n-placeholder="auth.minChars" placeholder="Min. 6 characters" required
+                                aria-required="true">
+                            <div class="password-strength">
+                                <div class="password-strength-bar" id="strengthBar"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="regConfirm" data-i18n="auth.confirmPassword">Confirm Password</label>
+                            <input type="password" id="regConfirm" class="form-input" autocomplete="new-password"
+                                data-i18n-placeholder="auth.repeatPw" placeholder="Repeat your password" required
+                                aria-required="true">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%; margin-top: 8px;"
+                            data-i18n="auth.createAccount">Create Account</button>
+                        <p
+                            style="text-align: center; margin-top: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+                            <span data-i18n="auth.hasAccount">Already have an account?</span>
+                            <a href="#" id="switchToLogin" style="color: var(--cyan); font-weight: 600;"
+                                data-i18n="auth.loginTab">Login</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="forgotModal">
+        <div class="modal" style="max-width: 400px; padding: 32px; text-align: center;">
+            <button class="modal-close" onclick="closeForgotPassword()">&times;</button>
+            <div style="font-size: 3rem; margin-bottom: 16px;">🔑</div>
+            <h2 style="margin-bottom: 8px;" data-i18n="auth.forgotTitle">Reset Password</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 24px; font-size: 0.9rem;"
+                data-i18n="auth.forgotDesc">Enter your email address and we'll send you a link to reset your password.
+            </p>
+
+            <form id="forgotForm" onsubmit="handleForgotPw(event)" style="text-align: left;">
+                <div class="form-group">
+                    <label for="forgotEmail" data-i18n="auth.email">Email</label>
+                    <input type="email" id="forgotEmail" class="form-input" placeholder="you@example.com" required
+                        aria-required="true">
+                </div>
+                <button type="submit" id="forgotBtn" class="btn btn-primary btn-glow"
+                    style="width: 100%; justify-content: center; margin-top: 8px;">
+                    <span data-i18n="auth.sendReset">Send Reset Link</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/animations.js"></script>
+</body>
+
+</html>

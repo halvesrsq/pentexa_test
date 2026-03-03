@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Pentexa — Next-generation cybersecurity tools and penetration testing services. Protect your digital assets with cutting-edge technology.">
+  <title>Pentexa — Cybersecurity Solutions</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="logo.png">
+  <meta property="og:title" content="Pentexa — Cybersecurity Solutions">
+  <meta property="og:description"
+    content="Pentexa — Next-generation cybersecurity tools and penetration testing services. Protect your digital assets with cutting-edge technology.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pentexa.io/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Pentexa — Cybersecurity Solutions">
+  <meta name="twitter:description"
+    content="Pentexa — Next-generation cybersecurity tools and penetration testing services. Protect your digital assets with cutting-edge technology.">
+</head>
+
+<body>
+  <!-- Hero -->
+  <section class="hero" aria-label="Hero section">
+    <div class="hero-bg">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="scanner-line" aria-hidden="true"></div>
+    </div>
+    <div class="container">
+      <div class="hero-content">
+        <h1 data-i18n="hero.title1" data-i18n-html>Defend Your Digital World with <span
+            class="gradient-text">Pentexa</span></h1>
+        <p data-i18n="hero.subtitle">Advanced cybersecurity tools and expert penetration testing services. We find
+          vulnerabilities before attackers do.</p>
+        <div class="hero-actions">
+          <a href="tools.html" class="btn btn-primary" data-i18n="hero.cta1">Explore Tools</a>
+          <a href="services.html#quote" class="btn btn-secondary" data-i18n="hero.cta2">Get a Security Audit</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="stat-number" data-count="25" data-suffix="+">0</div>
+            <div class="stat-label" data-i18n="stat.modules">Security Modules</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-number" data-count="14000" data-suffix="+">0</div>
+            <div class="stat-label" data-i18n="stat.scans">Scans Completed</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-number" data-count="99" data-suffix="%">0</div>
+            <div class="stat-label" data-i18n="stat.satisfaction">Client Satisfaction</div>
+          </div>
+          <div class="hero-stat">
+            <div class="stat-number" data-count="350" data-suffix="+">0</div>
+            <div class="stat-label" data-i18n="stat.vulns">Vulnerabilities Found</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools Preview -->
+  <section class="section" aria-label="Security tools preview">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 data-i18n="tools.section.title" data-i18n-html>Our <span class="accent">Security Tools</span></h2>
+        <p data-i18n="tools.section.desc">Battle-tested tools built by security researchers for security professionals.
+        </p>
+      </div>
+      <div class="grid grid-4" id="homeToolsGrid"></div>
+      <div style="text-align: center; margin-top: 40px;" class="reveal">
+        <a href="tools.html" class="btn btn-secondary" data-i18n="tools.viewAll">View All Tools →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Preview -->
+  <section class="section" style="background: var(--bg-secondary);" aria-label="Services overview">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 data-i18n="services.section.title" data-i18n-html>Security <span class="accent">Services</span></h2>
+        <p data-i18n="services.section.desc">From vulnerability assessments to full red team engagements — we've got you
+          covered.</p>
+      </div>
+      <div class="grid grid-3" id="homeServicesGrid"></div>
+    </div>
+  </section>
+
+  <!-- Interactive Demo -->
+  <section class="section" aria-label="Interactive scan demo">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 data-i18n="demo.title" data-i18n-html>Try a <span class="accent">Live Demo</span></h2>
+        <p data-i18n="demo.desc">Run a simulated security scan and see what Pentexa can uncover.</p>
+      </div>
+      <div class="demo-section reveal">
+        <div style="display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+          <input type="text" id="scanTarget" class="form-input" data-i18n-placeholder="demo.placeholder"
+            placeholder="Enter target (e.g., example.com)" style="flex:1; min-width: 200px;" aria-label="Scan target">
+          <button class="btn btn-primary" id="startScan" data-i18n="demo.runScan">Run Scan</button>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-bar-fill" id="scanProgress"></div>
+        </div>
+        <div class="terminal">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">pentexa-cli</span>
+          </div>
+          <div class="terminal-body" id="scanTerminal" style="max-height: 260px; overflow-y: auto;"></div>
+        </div>
+        <!-- Report Preview -->
+        <div id="scanReport" class="report-preview" style="display: none;">
+          <h3 style="margin: 24px 0 16px;" data-i18n="demo.reportTitle">📋 Scan Report Preview</h3>
+          <div class="report-section">
+            <h4 data-i18n="demo.riskScore">Risk Score</h4>
+            <span class="risk-score risk-medium">6.5 / 10 — Medium</span>
+          </div>
+          <div class="report-section">
+            <h4 data-i18n="demo.findings">Findings</h4>
+            <ul style="color: var(--text-secondary); font-size: 0.9rem;">
+              <li style="padding: 6px 0;" data-i18n="report.tls">⚠️ TLS 1.0 supported — should be disabled</li>
+              <li style="padding: 6px 0;" data-i18n="report.xss">🔴 Potential XSS in /search endpoint</li>
+              <li style="padding: 6px 0;" data-i18n="report.csp">⚠️ Missing Content-Security-Policy header</li>
+              <li style="padding: 6px 0;" data-i18n="report.xfo">⚠️ X-Frame-Options header not set</li>
+            </ul>
+          </div>
+          <div class="report-section">
+            <h4 data-i18n="demo.recommendations">Recommendations</h4>
+            <ul style="color: var(--text-secondary); font-size: 0.9rem;">
+              <li style="padding: 6px 0;" data-i18n="report.rec1">✅ Disable TLS 1.0 and 1.1, enforce TLS 1.2+</li>
+              <li style="padding: 6px 0;" data-i18n="report.rec2">✅ Implement input sanitization and output encoding
+              </li>
+              <li style="padding: 6px 0;" data-i18n="report.rec3">✅ Add security headers: CSP, X-Frame-Options, HSTS
+              </li>
+              <li style="padding: 6px 0;" data-i18n="report.rec4">✅ Schedule quarterly penetration tests</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Terminal Component -->
+  <section class="section" style="background: var(--bg-secondary);" aria-label="Terminal demo">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;">
+        <div class="reveal">
+          <h2 data-i18n="terminal.title" data-i18n-html>Power of the <span class="gradient-text">Command Line</span>
+          </h2>
+          <p style="color: var(--text-secondary); margin: 16px 0 24px;" data-i18n="terminal.desc">Our CLI tools
+            integrate seamlessly into your security workflow. Automate scans, generate reports, and monitor your
+            infrastructure — all from the terminal.</p>
+          <a href="tools.html" class="btn btn-secondary" data-i18n="terminal.cta">Explore CLI Tools →</a>
+        </div>
+        <div class="terminal reveal">
+          <div class="terminal-header">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">pentexa-cli v2.4.0</span>
+          </div>
+          <div class="terminal-body" id="heroTerminal"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section" aria-label="Client testimonials">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 data-i18n="testimonials.title" data-i18n-html>What <span class="accent">Clients Say</span></h2>
+        <p data-i18n="testimonials.desc">Trusted by security teams and engineering leaders worldwide.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="testimonial-card reveal">
+          <p class="quote" data-i18n="testimonial.1.quote">"Pentexa found critical vulnerabilities in our API layer that
+            two previous vendors missed. Their tools are exceptional and reporting is crystal clear."</p>
+          <div class="author">
+            <div class="avatar">JD</div>
+            <div class="author-info">
+              <div class="name" data-i18n="testimonial.1.name">James Davis</div>
+              <div class="role" data-i18n="testimonial.1.role">CTO, FinSecure</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal">
+          <p class="quote" data-i18n="testimonial.2.quote">"We integrated Pentexa's automated scanning into our CI/CD
+            pipeline. It's caught dozens of issues before they reached production. Game changer."</p>
+          <div class="author">
+            <div class="avatar">SK</div>
+            <div class="author-info">
+              <div class="name" data-i18n="testimonial.2.name">Sarah Kim</div>
+              <div class="role" data-i18n="testimonial.2.role">Head of Engineering, CloudOps</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal">
+          <p class="quote" data-i18n="testimonial.3.quote">"Best investment in security we've made. The red team
+            engagement was thorough, professional, and the recommendations were immediately actionable."</p>
+          <div class="author">
+            <div class="avatar">MR</div>
+            <div class="author-info">
+              <div class="name" data-i18n="testimonial.3.name">Marco Rossi</div>
+              <div class="role" data-i18n="testimonial.3.role">CISO, EuroBank</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" style="background: var(--bg-secondary);" aria-label="Frequently asked questions">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 data-i18n="faq.title" data-i18n-html>Frequently <span class="accent">Asked Questions</span></h2>
+      </div>
+      <div style="max-width: 700px; margin: 0 auto;">
+        <div class="faq-item reveal">
+          <button class="faq-question"><span data-i18n="faq.q1">What types of security assessments do you offer?</span>
+            <span class="faq-icon">+</span></button>
+          <div class="faq-answer">
+            <p data-i18n="faq.a1">We offer vulnerability assessments, penetration testing (web, mobile, API, network),
+              red team engagements, source code reviews, cloud security audits, and social engineering tests.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question"><span data-i18n="faq.q2">How long does a typical security audit take?</span>
+            <span class="faq-icon">+</span></button>
+          <div class="faq-answer">
+            <p data-i18n="faq.a2">Timelines vary by scope. A standard web application pentest takes 1-2 weeks. Network
+              assessments take 1-3 weeks. Enterprise engagements can run 4-8 weeks depending on complexity.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question"><span data-i18n="faq.q3">Are your tools suitable for beginners?</span> <span
+              class="faq-icon">+</span></button>
+          <div class="faq-answer">
+            <p data-i18n="faq.a3">Yes! Our tools are designed with intuitive interfaces and detailed documentation. We
+              also offer training so your team can get the most out of our platform.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question"><span data-i18n="faq.q4">Do you provide remediation support?</span> <span
+              class="faq-icon">+</span></button>
+          <div class="faq-answer">
+            <p data-i18n="faq.a4">Absolutely. All our audit packages include remediation guidance. Pro and Enterprise
+              tiers also include re-testing to verify fixes and ongoing advisory support.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question"><span data-i18n="faq.q5">Can I try the tools before purchasing?</span> <span
+              class="faq-icon">+</span></button>
+          <div class="faq-answer">
+            <p data-i18n="faq.a5">Yes — we offer free tiers for ReconX Scanner and PhishNet Detector, plus a live demo
+              on our homepage. Request a demo for enterprise tools.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" aria-label="Call to action">
+    <div class="container" style="text-align: center;">
+      <div class="reveal">
+        <h2 data-i18n="cta.title" data-i18n-html>Ready to Secure Your <span class="gradient-text">Infrastructure</span>?
+        </h2>
+        <p style="color: var(--text-secondary); margin: 16px auto 32px; max-width: 500px;" data-i18n="cta.desc">Get
+          started with a free security assessment or talk to our team about enterprise solutions.</p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+          <a href="services.html#quote" class="btn btn-primary btn-glow" data-i18n="cta.btn1">Request Free Audit</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/animations.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Render first 4 tools on home
+      renderToolCards('homeToolsGrid', 'all', 4);
+      renderServiceCards('homeServicesGrid');
+    });
+  </script>
+</body>
+
+</html>

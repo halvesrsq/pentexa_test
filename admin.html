@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pentexa Admin Panel — manage products, tools, and services.">
+    <title>Admin Panel — Pentexa</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2300ffcc'/%3E%3Ctext x='50' y='70' font-family='Arial' font-size='60' font-weight='bold' text-anchor='middle' fill='%230a0a0a'%3EP%3C/text%3E%3C/svg%3E">
+    <meta property="og:title" content="Pentexa">
+    <meta property="og:description" content="Pentexa — Cybersecurity and penetration testing platform.">
+    <meta property="og:type" content="website">
+</head>
+
+<body>
+    <div class="page-header">
+        <h1 data-i18n="adminPage.title" data-i18n-html>Admin <span class="gradient-text">Panel</span></h1>
+        <p data-i18n="adminPage.desc">Manage tools, services, and products.</p>
+    </div>
+
+    <section class="section" style="padding-top: 20px;" aria-label="Admin product management">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 32px;">
+                <!-- Product Form -->
+                <div>
+                    <div class="card" style="position: sticky; top: calc(var(--nav-height) + 24px);">
+                        <h3 id="adminFormTitle" style="margin-bottom: 20px;" data-i18n="admin.addProduct">Add Product
+                        </h3>
+                        <form id="adminProductForm" novalidate>
+                            <input type="hidden" id="prodId">
+                            <div class="form-group">
+                                <label for="prodName" data-i18n="admin.name">Name *</label>
+                                <input type="text" id="prodName" class="form-input" required placeholder="Product name"
+                                    aria-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="prodType" data-i18n="admin.type">Type *</label>
+                                <select id="prodType" class="form-input" required aria-required="true">
+                                    <option value="tool">Tool</option>
+                                    <option value="service">Service</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="prodCategory" data-i18n="admin.category">Category *</label>
+                                <input type="text" id="prodCategory" class="form-input" required
+                                    placeholder="e.g. Web Security, Recon" aria-required="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="prodPrice" data-i18n="admin.price">Price ($)</label>
+                                <input type="number" id="prodPrice" class="form-input" placeholder="0" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="prodBadge" data-i18n="admin.badge">Badge</label>
+                                <input type="text" id="prodBadge" class="form-input"
+                                    placeholder="e.g. New, Popular, Pro">
+                            </div>
+                            <div class="form-group">
+                                <label for="prodDesc" data-i18n="admin.shortDesc">Short Description *</label>
+                                <textarea id="prodDesc" class="form-input" required
+                                    placeholder="Brief description of the product" aria-required="true"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="prodFeatures" data-i18n="admin.features">Features (one per line)</label>
+                                <textarea id="prodFeatures" class="form-input"
+                                    placeholder="Feature 1&#10;Feature 2&#10;Feature 3"></textarea>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button type="submit" class="btn btn-primary" style="flex: 1;"
+                                    data-i18n="admin.save">Save Product</button>
+                                <button type="button" class="btn btn-secondary" onclick="resetAdminForm()"
+                                    data-i18n="admin.clear">Clear</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Product List -->
+                <div>
+                    <div class="admin-table-wrapper" id="adminTableWrapper"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/animations.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const params = new URLSearchParams(location.search);
+            if (params.get('uid')) {
+                localStorage.setItem('pentexa_session', JSON.stringify({ userId: params.get('uid') }));
+            }
+            const user = await requireAdmin();
+            if (!user) return;
+            renderAdminProducts('adminTableWrapper');
+            initAdminForm();
+        });
+
+        function resetAdminForm() {
+            document.getElementById('adminProductForm').reset();
+            document.getElementById('prodId').value = '';
+            document.getElementById('adminFormTitle').textContent = t('admin.addProduct');
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pentexa Security Tools — powerful tools for security professionals.">
+    <title>Security Tools — Pentexa</title>
+    <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="logo.png">
+  <meta property="og:title" content="Pentexa">
+  <meta property="og:description" content="Pentexa — Cybersecurity and penetration testing platform.">
+  <meta property="og:type" content="website">
+</head>
+
+<body>
+    <div class="page-header">
+        <h1 data-i18n="toolsPage.title" data-i18n-html>Security <span class="gradient-text">Tools</span></h1>
+        <p data-i18n="toolsPage.desc">Powerful tools built by security researchers, for security professionals.</p>
+    </div>
+
+    <section class="section" style="padding-top: 20px;" aria-label="Tools listing">
+        <div class="container">
+            <div class="filter-bar reveal">
+                <button class="filter-btn active" data-filter="all" data-i18n="filter.all">All Tools</button>
+                <button class="filter-btn" data-filter="recon" data-i18n="filter.recon">🔍 Recon</button>
+                <button class="filter-btn" data-filter="web security" data-i18n="filter.web">🌐 Web Security</button>
+                <button class="filter-btn" data-filter="network" data-i18n="filter.network">🛡️ Network</button>
+                <button class="filter-btn" data-filter="automation" data-i18n="filter.automation">⚡ Automation</button>
+            </div>
+            <div class="grid grid-3" id="toolsGrid">
+                <div class="card skeleton-card">
+                    <div class="skeleton skeleton-circle"></div>
+                    <div class="skeleton skeleton-line"></div>
+                    <div class="skeleton skeleton-line short"></div>
+                </div>
+                <div class="card skeleton-card">
+                    <div class="skeleton skeleton-circle"></div>
+                    <div class="skeleton skeleton-line"></div>
+                    <div class="skeleton skeleton-line short"></div>
+                </div>
+                <div class="card skeleton-card">
+                    <div class="skeleton skeleton-circle"></div>
+                    <div class="skeleton skeleton-line"></div>
+                    <div class="skeleton skeleton-line short"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom CTA -->
+    <section class="section" style="background: var(--bg-secondary);">
+        <div class="container" style="text-align: center;">
+            <div class="reveal">
+                <h2 data-i18n="tools.customTitle" data-i18n-html>Need a Custom <span class="accent">Security
+                        Solution</span>?</h2>
+                <p style="color: var(--text-secondary); margin: 12px auto 32px; max-width: 500px;"
+                    data-i18n="tools.customDesc">We build custom tools and integrations tailored to your security
+                    requirements.</p>
+                <a href="services.html#quote" class="btn btn-primary btn-glow" data-i18n="tools.contactUs">Contact
+                    Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tool Modal -->
+    <div class="modal-overlay" id="toolModal">
+        <div class="modal">
+            <button class="modal-close"
+                onclick="document.getElementById('toolModal').classList.remove('active')">&times;</button>
+            <div id="toolModalContent"></div>
+        </div>
+    </div>
+
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/animations.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderToolCards('toolsGrid', 'all');
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderToolCards('toolsGrid', btn.dataset.filter);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
