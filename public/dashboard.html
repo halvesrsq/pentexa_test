@@ -956,12 +956,12 @@
             catch (e) { session = null; }
 
             // Fallback: check URL parameter (for file:// protocol)
-            if (!session || !session.userId) {
+            if (!session || !session.user || !session.user.id) {
                 try {
                     var params = new URLSearchParams(window.location.search);
                     var uid = params.get('uid');
                     if (uid) {
-                        session = { userId: uid };
+                        session = { user: { id: uid, email: 'user@pentexa.local', full_name: 'Local User' } };
                         // Save to localStorage for future use
                         localStorage.setItem('pentexa_session', JSON.stringify(session));
                     }
@@ -969,7 +969,7 @@
             }
 
             // No session at all → show debug instead of redirect
-            if (!session || !session.userId) {
+            if (!session || !session.user || !session.user.id) {
                 document.body.innerHTML = '<div style="color:white; padding: 40px;"><h1>Auth Error: No Session</h1><p>Session read as: ' + JSON.stringify(session) + '</p><a href="auth.html">Go Back to Login</a></div>';
                 return;
             }
